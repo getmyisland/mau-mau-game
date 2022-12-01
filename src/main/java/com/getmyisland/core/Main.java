@@ -10,22 +10,24 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+	public static Stage stage = null;
+
 	@Override
 	public void start(Stage primaryStage) throws IOException {
+		// Set the stage
+		Main.stage = primaryStage;
 
 		// Set the stage values
 		primaryStage.setTitle("Mau Mau Game");
 		primaryStage.setResizable(true);
-		primaryStage.setMinWidth(1280);
-		primaryStage.setMinHeight(720);
-		
+
 		// Load a scene with fxml loader
-		FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/GameView.fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/GameConfig.fxml"));
 		Scene scene = new Scene((Parent) fxmlLoader.load());
-		
+
 		// Set the loaded scene
 		primaryStage.setScene(scene);
-		
+
 		primaryStage.show();
 	}
 
