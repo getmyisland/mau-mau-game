@@ -42,7 +42,7 @@ public class GameConfigController {
 		sliderPlayerAmount.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
-				labelPlayerAmount.textProperty().setValue(String.valueOf("Player Amount: " + newValue.intValue()));
+				labelPlayerAmount.textProperty().setValue(String.valueOf(newValue.intValue()));
 				CalculateCardsLeftInDeck();
 			}
 
@@ -51,16 +51,14 @@ public class GameConfigController {
 		sliderCardsPerPlayer.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
-				labelCardsPerPlayer.textProperty().setValue(String.valueOf("Cards per Player: " + newValue.intValue()));
+				labelCardsPerPlayer.textProperty().setValue(String.valueOf(newValue.intValue()));
 				CalculateCardsLeftInDeck();
 			}
 
 		});
 
-		labelPlayerAmount.textProperty()
-				.setValue(String.valueOf("Player Amount: " + (int) sliderPlayerAmount.getValue()));
-		labelCardsPerPlayer.textProperty()
-				.setValue(String.valueOf("Cards per Player: " + (int) sliderCardsPerPlayer.getValue()));
+		labelPlayerAmount.textProperty().setValue(String.valueOf((int) sliderPlayerAmount.getValue()));
+		labelCardsPerPlayer.textProperty().setValue(String.valueOf((int) sliderCardsPerPlayer.getValue()));
 		CalculateCardsLeftInDeck();
 	}
 

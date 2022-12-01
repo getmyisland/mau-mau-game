@@ -1,5 +1,11 @@
 package com.getmyisland.fx;
 
-public class GameViewController {
+import com.getmyisland.core.GameManager;
 
+public class GameViewController {
+	private final GameManager gameManager = new GameManager();
+	
+	public void initialize() {
+		gameManager.StartGame();
+	}
 }
