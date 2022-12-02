@@ -6,7 +6,7 @@ import java.util.List;
 public class Player {
 	private final String name;
 	
-	private List<Card> hand = new ArrayList<Card>();
+	private List<Card> hand = new ArrayList<>();
 	
 	public Player(final String name) {
 		this.name = name;
@@ -17,7 +17,7 @@ public class Player {
 	 * 
 	 * @param card to add
 	 */
-	public void AddCardToHand(Card card) {
+	public void addCardToHand(Card card) {
 		hand.add(card);
 	}
 	
@@ -26,7 +26,7 @@ public class Player {
 	 * 
 	 * @param card to remove
 	 */
-	public void RemoveCardFromHand(Card card) {
+	public void removeCardFromHand(Card card) {
 		hand.remove(card);
 	}
 	

@@ -43,7 +43,7 @@ public class GameConfigController {
 			@Override
 			public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
 				labelPlayerAmount.textProperty().setValue(String.valueOf(newValue.intValue()));
-				CalculateCardsLeftInDeck();
+				calculateCardsLeftInDeck();
 			}
 
 		});
@@ -52,21 +52,21 @@ public class GameConfigController {
 			@Override
 			public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
 				labelCardsPerPlayer.textProperty().setValue(String.valueOf(newValue.intValue()));
-				CalculateCardsLeftInDeck();
+				calculateCardsLeftInDeck();
 			}
 
 		});
 
 		labelPlayerAmount.textProperty().setValue(String.valueOf((int) sliderPlayerAmount.getValue()));
 		labelCardsPerPlayer.textProperty().setValue(String.valueOf((int) sliderCardsPerPlayer.getValue()));
-		CalculateCardsLeftInDeck();
+		calculateCardsLeftInDeck();
 	}
 
 	/**
 	 * Calculates the cards left in the deck with the current values. If there are
 	 * less than 5 cards in the deck the Play button is disabled.
 	 */
-	private void CalculateCardsLeftInDeck() {
+	private void calculateCardsLeftInDeck() {
 		int cardsLeftInDeck = GameConfig.CARDS_PER_DECK
 				- ((int) sliderPlayerAmount.getValue() * (int) sliderCardsPerPlayer.getValue());
 		labelCalculatedCardsLeftInDeck.textProperty()

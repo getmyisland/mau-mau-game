@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-
 <BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.getmyisland.fx.GameConfigController">
    <center>
       <GridPane hgap="4.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vgap="4.0" BorderPane.alignment="CENTER">
@@ -34,7 +33,7 @@
             <TextArea fx:id="txtAreaErrorLog" editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" wrapText="true" GridPane.columnSpan="2147483647" GridPane.rowIndex="3" />
             <Label fx:id="labelPlayerAmount" text="5" GridPane.columnIndex="1" />
             <Label fx:id="labelCardsPerPlayer" text="1" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Slider fx:id="sliderPlayerAmount" blockIncrement="1.0" majorTickUnit="1.0" max="5.0" min="1.0" minorTickCount="0" showTickMarks="true" snapToTicks="true" value="1.0" GridPane.columnIndex="3" />
+            <Slider fx:id="sliderPlayerAmount" blockIncrement="1.0" majorTickUnit="1.0" max="5.0" min="2.0" minorTickCount="0" showTickMarks="true" snapToTicks="true" value="1.0" GridPane.columnIndex="3" />
             <Slider fx:id="sliderCardsPerPlayer" blockIncrement="1.0" majorTickUnit="1.0" max="10.0" min="5.0" minorTickCount="0" showTickMarks="true" snapToTicks="true" value="5.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
             <Label fx:id="labelCalculatedCardsLeftInDeck" text="8 cards left after each Player draws his card" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" />
             <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="50.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="4">

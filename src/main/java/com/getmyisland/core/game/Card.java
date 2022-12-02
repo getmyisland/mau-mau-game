@@ -5,22 +5,22 @@ package com.getmyisland.core.game;
  */
 public class Card {
 	public enum Color {
-		Kreuz, // Eichel
-		Pik, // Laub
-		Herz,
-		Karo // Schellen
+		KREUZ, // Eichel
+		PIK, // Laub
+		HERZ,
+		KARO // Schellen
 	}
 	
 	public enum Value {
-		Sechs,
-		Sieben,
-		Acht,
-		Neun,
-		Zehn,
-		Bube,
-		Dame,
-		Koenig,
-		Ass
+		SECHS,
+		SIEBEN,
+		ACHT,
+		NEUN,
+		ZEHN,
+		BUBE,
+		DAME,
+		KOENIG,
+		ASS
 	}
 	
 	private final Color color;
