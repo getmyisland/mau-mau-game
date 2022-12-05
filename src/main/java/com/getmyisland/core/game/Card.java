@@ -13,14 +13,14 @@ public class Card {
 	
 	public enum Value {
 		SECHS,
-		SIEBEN,
-		ACHT,
-		NEUN,
+		SIEBEN, // Zwei-Ziehen
+		ACHT, // Aussetzen???
+		NEUN, // Alleskönner
 		ZEHN,
-		BUBE,
+		BUBE, // Wünscher
 		DAME,
 		KOENIG,
-		ASS
+		ASS // Man darf nochmal legen
 	}
 	
 	private final Color color;
@@ -30,6 +30,10 @@ public class Card {
 	public Card(final Color color, final Value value) {
 		this.color = color;
 		this.value = value;
+	}
+	
+	public String getFormattedText() {
+		return this.color + "\n" + this.value;
 	}
 
 	/**

@@ -6,16 +6,17 @@ import java.util.List;
 public class DiscardPile {
 	private final List<Card> cards = new ArrayList<>();
 	
-	public DiscardPile() {
+	public DiscardPile(Card card) {
 		cards.clear();
+		cards.add(card);
 	}
 
 	public void discardCard(Card cardToDiscard) {
 		cards.add(cardToDiscard);
 	}
 	
-	public void clearDiscardPile() {
-		cards.clear();
+	public Card getTopCard() {
+		return cards.get(cards.size() - 1);
 	}
 	
 	/**
