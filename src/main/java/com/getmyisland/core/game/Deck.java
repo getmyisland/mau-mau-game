@@ -28,13 +28,22 @@ public class Deck {
 			}
 		}
 		
+		// Shuffle the deck after
 		shuffleDeck();
 	}
 	
+	/**
+	 * Shuffles the deck.
+	 */
 	private void shuffleDeck() {
 		Collections.shuffle(cards);
 	}
 	
+	/**
+	 * Draws the top {@link Card} from the {@link Deck}
+	 * 
+	 * @return the top {@link Card}
+	 */
 	public Card drawCard() {
 		if(cards == null || cards.isEmpty()) {
 			return null;
@@ -47,6 +56,11 @@ public class Deck {
 		return card;
 	}
 	
+	/**
+	 * Checks if the deck is empty.
+	 * 
+	 * @return true if deck is empty
+	 */
 	public boolean isEmpty() {
 		if(cards == null) {
 			return true;

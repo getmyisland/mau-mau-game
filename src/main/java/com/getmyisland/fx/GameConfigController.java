@@ -79,17 +79,20 @@ public class GameConfigController {
 
 	@FXML
 	public void onQuitButtonClicked() {
+		// Stop the application
 		System.out.println("Exiting game...");
 		System.exit(0);
 	}
 
 	@FXML
 	public void onPlayButtonClicked() {
+		// Set the game config values
 		GameConfig.PLAYERS = (int) sliderPlayerAmount.getValue();
 		System.out.println(GameConfig.PLAYERS + " Player(s)");
 		GameConfig.CARD_AMOUNT_PER_PLAYER = (int) sliderCardsPerPlayer.getValue();
 		System.out.println(GameConfig.CARD_AMOUNT_PER_PLAYER + " cards per Player");
 		
+		// Load the game view
 		Main.loadGameView();
 	}
 }

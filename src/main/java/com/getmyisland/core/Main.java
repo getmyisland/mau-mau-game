@@ -9,7 +9,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-
+	/** The primary stage of the app */
 	private static Stage stage = null;
 
 	@Override
@@ -26,6 +26,9 @@ public class Main extends Application {
 		primaryStage.show();
 	}
 
+	/**
+	 * Load the GameConfig FXML file
+	 */
 	public static void loadGameConfig() {
 		try {
 			System.out.println("Loading game config...");
@@ -43,6 +46,9 @@ public class Main extends Application {
 		}
 	}
 
+	/**
+	 * Load the GameView FXML file
+	 */
 	public static void loadGameView() {
 		try {
 			System.out.println("Loading game stage...");

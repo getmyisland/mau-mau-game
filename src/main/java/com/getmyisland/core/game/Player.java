@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
+	/** The name of the {@link Player} */
 	private final String name;
 	
+	/** The {@link Player}s {@link Card}s on the hand */
 	private List<Card> hand = new ArrayList<>();
 	
 	public Player(final String name) {
