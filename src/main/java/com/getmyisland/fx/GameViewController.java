@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.getmyisland.core.GameManager;
+import com.getmyisland.core.Main;
 import com.getmyisland.core.game.Card;
 import com.getmyisland.core.game.Player;
 
@@ -11,17 +12,20 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 
 /**
  * TODO Label for current player
  * TODO Button to go back to config menu
- * TODO Wünscher Popup
  * 
  * @author MFI
  *
  */
 public class GameViewController {
 	private final GameManager gameManager = new GameManager(this);
+	
+	@FXML
+	private Label labelCurrentPlayer;
 	
 	private List<Button> cardButtons = new ArrayList<>();
 	
@@ -144,8 +148,19 @@ public class GameViewController {
 		btnDiscardPile.setText(card.getFormattedText());
 	}
 	
+	public void updateCurrentPlayerText(Player currentPlayer) {
+		if(labelCurrentPlayer != null) {
+			labelCurrentPlayer.setText("Current Player: " + currentPlayer.getName());
+		}
+	}
+	
 	@FXML
 	public void onBtnDrawCardPressed() {
 		gameManager.playerDrawCard();
+	}
+	
+	@FXML
+	public void onReturnToConfigMenuButtonPressed() {
+		Main.loadGameConfig();
 	}
 }

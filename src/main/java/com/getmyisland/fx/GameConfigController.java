@@ -1,16 +1,11 @@
 package com.getmyisland.fx;
 
-import java.io.IOException;
-
 import com.getmyisland.core.GameConfig;
 import com.getmyisland.core.Main;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -90,23 +85,11 @@ public class GameConfigController {
 
 	@FXML
 	public void onPlayButtonClicked() {
-		System.out.println("Loading game stage...");
-
 		GameConfig.PLAYERS = (int) sliderPlayerAmount.getValue();
 		System.out.println(GameConfig.PLAYERS + " Player(s)");
 		GameConfig.CARD_AMOUNT_PER_PLAYER = (int) sliderCardsPerPlayer.getValue();
 		System.out.println(GameConfig.CARD_AMOUNT_PER_PLAYER + " cards per Player");
-
-		try {
-			// Load a scene with fxml loader
-			FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/GameView.fxml"));
-			Scene scene = new Scene((Parent) fxmlLoader.load());
-
-			// Set the loaded scene
-			Main.stage.setScene(scene);
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
+		
+		Main.loadGameView();
 	}
 }

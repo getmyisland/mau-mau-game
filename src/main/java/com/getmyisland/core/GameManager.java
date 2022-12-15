@@ -1,10 +1,14 @@
 package com.getmyisland.core;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import com.getmyisland.core.game.Card;
+import com.getmyisland.core.game.Card.Color;
+import com.getmyisland.core.game.Card.Value;
 import com.getmyisland.core.game.Deck;
 import com.getmyisland.core.game.DiscardPile;
 import com.getmyisland.core.game.Player;
@@ -13,6 +17,7 @@ import com.getmyisland.fx.GameViewController;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.DialogEvent;
 
 public class GameManager {
@@ -23,6 +28,8 @@ public class GameManager {
 
 	private Deck deck;
 	private DiscardPile discardPile;
+
+	private Color wishColor = null;
 
 	public GameManager(final GameViewController gameViewController) {
 		this.gameViewController = gameViewController;
@@ -52,7 +59,7 @@ public class GameManager {
 		onPlayerTurnEnd(false);
 	}
 
-	private void onPlayerTurnEnd(boolean skipNextPlayer) {
+	private void updateCards() {
 		if (deck.isEmpty()) {
 			// Create a new deck from the discard pile
 			deck = new Deck(discardPile.getCards());
@@ -61,7 +68,15 @@ public class GameManager {
 			discardPile = new DiscardPile(deck.drawCard());
 		}
 
+		if (wishColor != null) {
+			discardPile.getTopCard().changeWishColor(wishColor);
+		}
+
 		gameViewController.displayTopDiscardPileCard(discardPile.getTopCard());
+	}
+
+	private void onPlayerTurnEnd(boolean skipNextPlayer) {
+		updateCards();
 
 		// Clear the cards for the current player
 		gameViewController.clearCardButtons();
@@ -74,8 +89,14 @@ public class GameManager {
 			// Calculate the next player but skip the next player
 			currentPlayer = players.get(1);
 			Collections.rotate(players, -2);
+
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Skipped Player");
+			alert.setContentText("Skipped " + players.get(players.size() - 2).getName());
+			alert.showAndWait();
 		}
 
+		gameViewController.updateCurrentPlayerText(currentPlayer);
 		displayNextPlayerInformationPopup();
 	}
 
@@ -85,13 +106,35 @@ public class GameManager {
 		alert.setContentText("The next player will be " + currentPlayer.getName());
 		alert.setOnCloseRequest(new EventHandler<DialogEvent>() {
 			public void handle(DialogEvent event) {
-				onNextPlayerTurn();
+				updatePlayerCards();
 			}
 		});
 		alert.show();
 	}
 
-	public void onNextPlayerTurn() {
+	private void displayColorWishPopup() {
+		if (wishColor != null) {
+			return;
+		}
+
+		ChoiceDialog<Color> dialog = new ChoiceDialog<>(Color.values()[0], Arrays.asList(Color.values()));
+		dialog.setTitle("Wish Color Selection");
+		dialog.setHeaderText("Select the color of your choice");
+		dialog.setContentText("Choose a color");
+		dialog.setOnCloseRequest(new EventHandler<DialogEvent>() {
+			@Override
+			public void handle(DialogEvent event) {
+				// Get the value
+				wishColor = dialog.getResult();
+
+				onPlayerTurnEnd(false);
+			}
+		});
+
+		dialog.show();
+	}
+
+	public void updatePlayerCards() {
 		// Show cards for the next player
 		gameViewController.populateCardButtons(currentPlayer);
 	}
@@ -116,9 +159,20 @@ public class GameManager {
 		// Add the card to the discard pile
 		discardPile.discardCard(card);
 
-		// If its an ass don't end the turn
-		if (card.getValue() != Card.Value.ASS) {
-			onPlayerTurnEnd(card.getValue() == Card.Value.ACHT);
+		// Reset the wish color to null
+		wishColor = null;
+
+		if (card.getValue() == Value.BUBE) {
+			// Display wished color
+			displayColorWishPopup();
+		} else {
+			// If its an ass don't end the turn
+			if (card.getValue() != Card.Value.ASS) {
+				onPlayerTurnEnd(card.getValue() == Card.Value.ACHT);
+			} else {
+				updateCards();
+				updatePlayerCards();
+			}
 		}
 	}
 }

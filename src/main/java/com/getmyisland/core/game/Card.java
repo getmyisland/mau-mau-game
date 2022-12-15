@@ -23,8 +23,7 @@ public class Card {
 		ASS // Man darf nochmal legen
 	}
 	
-	private final Color color;
-	
+	private Color color;	
 	private final Value value;
 	
 	public Card(final Color color, final Value value) {
@@ -34,6 +33,10 @@ public class Card {
 	
 	public String getFormattedText() {
 		return this.color + "\n" + this.value;
+	}
+	
+	public void changeWishColor(final Color newColor) {
+		this.color = newColor;
 	}
 
 	/**
