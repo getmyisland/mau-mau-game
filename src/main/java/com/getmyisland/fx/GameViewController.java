@@ -15,8 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 /**
- * TODO Label for current player
- * TODO Button to go back to config menu
+ * TODO better way of handling sevens and eigth
  * 
  * @author MFI
  *

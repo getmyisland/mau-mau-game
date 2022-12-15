@@ -30,6 +30,7 @@ public class GameManager {
 	private DiscardPile discardPile;
 
 	private Color wishColor = null;
+	private int currentDrawPenalty = 0;
 
 	public GameManager(final GameViewController gameViewController) {
 		this.gameViewController = gameViewController;
@@ -75,13 +76,18 @@ public class GameManager {
 		gameViewController.displayTopDiscardPileCard(discardPile.getTopCard());
 	}
 
-	private void onPlayerTurnEnd(boolean skipNextPlayer) {
-		updateCards();
+	private void consumeCardEvent(boolean playerPlayedCard) {
+		if (!playerPlayedCard) {
+			return;
+		}
 
-		// Clear the cards for the current player
-		gameViewController.clearCardButtons();
+		Card topCard = discardPile.getTopCard();
 
-		if (!skipNextPlayer) {
+		if (topCard.getValue() == Value.BUBE) {
+			displayColorWishPopup();
+		}
+
+		if (topCard.getValue() != Value.ACHT) {
 			// Calculate the next player
 			currentPlayer = players.get(0);
 			Collections.rotate(players, -1);
@@ -96,6 +102,27 @@ public class GameManager {
 			alert.showAndWait();
 		}
 
+		if (topCard.getValue() == Value.SIEBEN) {
+			currentDrawPenalty += 2;
+		} else {
+			currentDrawPenalty = 0;
+		}
+	}
+
+	private void onPlayerTurnEnd(boolean playerPlayedCard) {
+		updateCards();
+
+		if (!playerPlayedCard) {
+			// Calculate the next player
+			currentPlayer = players.get(0);
+			Collections.rotate(players, -1);
+		} else {
+			consumeCardEvent(playerPlayedCard);
+		}
+
+		// Clear the cards for the current player
+		gameViewController.clearCardButtons();
+
 		gameViewController.updateCurrentPlayerText(currentPlayer);
 		displayNextPlayerInformationPopup();
 	}
@@ -107,6 +134,7 @@ public class GameManager {
 		alert.setOnCloseRequest(new EventHandler<DialogEvent>() {
 			public void handle(DialogEvent event) {
 				updatePlayerCards();
+				updateCards();
 			}
 		});
 		alert.show();
@@ -126,12 +154,9 @@ public class GameManager {
 			public void handle(DialogEvent event) {
 				// Get the value
 				wishColor = dialog.getResult();
-
-				onPlayerTurnEnd(false);
 			}
 		});
-
-		dialog.show();
+		dialog.showAndWait();
 	}
 
 	public void updatePlayerCards() {
@@ -162,17 +187,11 @@ public class GameManager {
 		// Reset the wish color to null
 		wishColor = null;
 
-		if (card.getValue() == Value.BUBE) {
-			// Display wished color
-			displayColorWishPopup();
+		if (card.getValue() != Card.Value.ASS) {
+			onPlayerTurnEnd(true);
 		} else {
-			// If its an ass don't end the turn
-			if (card.getValue() != Card.Value.ASS) {
-				onPlayerTurnEnd(card.getValue() == Card.Value.ACHT);
-			} else {
-				updateCards();
-				updatePlayerCards();
-			}
+			updateCards();
+			updatePlayerCards();
 		}
 	}
 }
