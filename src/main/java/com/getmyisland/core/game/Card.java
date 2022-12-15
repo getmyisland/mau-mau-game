@@ -1,49 +1,46 @@
 package com.getmyisland.core.game;
 
-/**
- * Card class that is supposed to represent a Schafkopf Tarock card
- */
 public class Card {
-	public enum Color {
-		KREUZ, // Eichel
-		PIK, // Laub
-		HERZ,
-		KARO // Schellen
+	public enum Suit {
+		CLUB,
+		SPADE,
+		HEART,
+		DIAMOND
 	}
 	
 	public enum Value {
-		SECHS,
-		SIEBEN, // Zwei-Ziehen
-		ACHT, // Aussetzen???
-		NEUN, // Alleskönner
-		ZEHN,
-		BUBE, // Wünscher
-		DAME,
-		KOENIG,
-		ASS // Man darf nochmal legen
+		SIX,
+		SEVEN, // Draw 2
+		EIGHT, // Skip next player
+		NINE,
+		TEN,
+		JACK, // Wish for a suit
+		QUEEN,
+		KING,
+		ASS // You can play another card
 	}
 	
-	private Color color;	
+	private Suit suit;	
 	private final Value value;
 	
-	public Card(final Color color, final Value value) {
-		this.color = color;
+	public Card(final Suit suit, final Value value) {
+		this.suit = suit;
 		this.value = value;
 	}
 	
 	public String getFormattedText() {
-		return this.color + "\n" + this.value;
+		return this.suit + "\n" + this.value;
 	}
 	
-	public void changeWishColor(final Color newColor) {
-		this.color = newColor;
+	public void wishForSuit(final Suit suit) {
+		this.suit = suit;
 	}
 
 	/**
-	 * @return the color
+	 * @return the suit
 	 */
-	public Color getColor() {
-		return color;
+	public Suit getSuit() {
+		return suit;
 	}
 
 	/**

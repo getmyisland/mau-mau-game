@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.getmyisland.core.game.Card;
-import com.getmyisland.core.game.Card.Color;
+import com.getmyisland.core.game.Card.Suit;
 import com.getmyisland.core.game.Card.Value;
 import com.getmyisland.core.game.Deck;
 import com.getmyisland.core.game.DiscardPile;
@@ -29,7 +29,6 @@ public class GameManager {
 	private Deck deck;
 	private DiscardPile discardPile;
 
-	private Color wishColor = null;
 	private int currentDrawPenalty = 0;
 
 	public GameManager(final GameViewController gameViewController) {
@@ -61,19 +60,10 @@ public class GameManager {
 	}
 
 	private void updateCards() {
-		if (deck.isEmpty()) {
-			// Create a new deck from the discard pile
-			deck = new Deck(discardPile.getCards());
-
-			// Clear the discard pile
-			discardPile = new DiscardPile(deck.drawCard());
-		}
-
-		if (wishColor != null) {
-			discardPile.getTopCard().changeWishColor(wishColor);
-		}
-
 		gameViewController.displayTopDiscardPileCard(discardPile.getTopCard());
+
+		// Show cards for the next player
+		gameViewController.populateCardButtons(currentPlayer);
 	}
 
 	private void consumeCardEvent(boolean playerPlayedCard) {
@@ -83,11 +73,11 @@ public class GameManager {
 
 		Card topCard = discardPile.getTopCard();
 
-		if (topCard.getValue() == Value.BUBE) {
-			displayColorWishPopup();
+		if (topCard.getValue() == Value.JACK) {
+			displaySuitWishPopup();
 		}
 
-		if (topCard.getValue() != Value.ACHT) {
+		if (topCard.getValue() != Value.EIGHT) {
 			// Calculate the next player
 			currentPlayer = players.get(0);
 			Collections.rotate(players, -1);
@@ -97,13 +87,20 @@ public class GameManager {
 			Collections.rotate(players, -2);
 
 			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Skipped Player");
-			alert.setContentText("Skipped " + players.get(players.size() - 2).getName());
+			alert.setTitle("Information");
+			alert.setHeaderText("8 of " + topCard.getSuit().toString() + "S played");
+			alert.setContentText(players.get(players.size() - 2).getName() + " will be skipped this round");
 			alert.showAndWait();
 		}
 
-		if (topCard.getValue() == Value.SIEBEN) {
+		if (topCard.getValue() == Value.SEVEN) {
 			currentDrawPenalty += 2;
+
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Information");
+			alert.setHeaderText("7 of " + topCard.getSuit().toString() + "S played");
+			alert.setContentText("Next player with no 7 must draw " + currentDrawPenalty + " cards");
+			alert.showAndWait();
 		} else {
 			currentDrawPenalty = 0;
 		}
@@ -127,44 +124,77 @@ public class GameManager {
 		displayNextPlayerInformationPopup();
 	}
 
+	private void onPlayerTurnStart() {
+		if (currentDrawPenalty > 0) {
+			boolean sevenFound = false;
+			for (Card card : currentPlayer.getHand()) {
+				if (card.getValue() == Value.SEVEN) {
+					// Player has a seven
+					sevenFound = true;
+					playCard(card);
+					break;
+				}
+			}
+
+			if (!sevenFound) {
+				for (int i = 0; i < currentDrawPenalty; i++) {
+					// The current player draws a card and ends the turn
+					currentPlayer.addCardToHand(deck.drawCard());
+				}
+
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Information");
+				alert.setHeaderText("Draw Card");
+				alert.setContentText(
+						players.get(players.size() - 1).getName() + " drew " + currentDrawPenalty + " cards");
+				alert.showAndWait();
+
+				currentDrawPenalty = 0;
+				onPlayerTurnEnd(false);
+				return;
+			}
+		}
+
+		updateCards();
+	}
+
 	private void displayNextPlayerInformationPopup() {
 		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Next Player");
+		alert.setTitle("Information");
+		alert.setHeaderText("Next Player");
 		alert.setContentText("The next player will be " + currentPlayer.getName());
 		alert.setOnCloseRequest(new EventHandler<DialogEvent>() {
 			public void handle(DialogEvent event) {
-				updatePlayerCards();
-				updateCards();
+				onPlayerTurnStart();
 			}
 		});
 		alert.show();
 	}
 
-	private void displayColorWishPopup() {
-		if (wishColor != null) {
-			return;
-		}
-
-		ChoiceDialog<Color> dialog = new ChoiceDialog<>(Color.values()[0], Arrays.asList(Color.values()));
-		dialog.setTitle("Wish Color Selection");
-		dialog.setHeaderText("Select the color of your choice");
-		dialog.setContentText("Choose a color");
+	private void displaySuitWishPopup() {
+		ChoiceDialog<Suit> dialog = new ChoiceDialog<>(Suit.values()[0], Arrays.asList(Suit.values()));
+		dialog.setTitle("Information");
+		dialog.setHeaderText("Select a suit");
+		dialog.setContentText("Choose suit");
 		dialog.setOnCloseRequest(new EventHandler<DialogEvent>() {
 			@Override
 			public void handle(DialogEvent event) {
 				// Get the value
-				wishColor = dialog.getResult();
+				discardPile.getTopCard().wishForSuit(dialog.getResult());
 			}
 		});
 		dialog.showAndWait();
 	}
 
-	public void updatePlayerCards() {
-		// Show cards for the next player
-		gameViewController.populateCardButtons(currentPlayer);
-	}
-
 	public void playerDrawCard() {
+		if (deck.isEmpty()) {
+			// Create a new deck from the discard pile
+			deck = new Deck(discardPile.getCards());
+
+			// Clear the discard pile
+			discardPile = new DiscardPile(deck.drawCard());
+		}
+
 		// The current player draws a card and ends the turn
 		currentPlayer.addCardToHand(deck.drawCard());
 		onPlayerTurnEnd(false);
@@ -174,7 +204,7 @@ public class GameManager {
 		Card topCard = discardPile.getTopCard();
 
 		// Check if the card can be placed
-		if (topCard.getColor() != card.getColor() && topCard.getValue() != card.getValue()) {
+		if (topCard.getSuit() != card.getSuit() && topCard.getValue() != card.getValue()) {
 			return;
 		}
 
@@ -184,14 +214,10 @@ public class GameManager {
 		// Add the card to the discard pile
 		discardPile.discardCard(card);
 
-		// Reset the wish color to null
-		wishColor = null;
-
 		if (card.getValue() != Card.Value.ASS) {
 			onPlayerTurnEnd(true);
 		} else {
 			updateCards();
-			updatePlayerCards();
 		}
 	}
 }

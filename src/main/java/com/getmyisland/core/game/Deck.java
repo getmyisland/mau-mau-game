@@ -24,7 +24,7 @@ public class Deck {
 		for(int i = 0; i < 4; i++) {
 			for (int j = 0; j <= 8; j++) {
 				// Create new card and add it to the list
-				cards.add(new Card(Card.Color.values()[i], Card.Value.values()[j]));
+				cards.add(new Card(Card.Suit.values()[i], Card.Value.values()[j]));
 			}
 		}
 		
