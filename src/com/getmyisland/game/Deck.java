@@ -1,4 +1,4 @@
-package com.getmyisland.core.game;
+package com.getmyisland.game;
 
 import java.util.ArrayList;
 import java.util.Collections;

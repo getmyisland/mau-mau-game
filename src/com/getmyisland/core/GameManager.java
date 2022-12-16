@@ -4,19 +4,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
-import com.getmyisland.core.game.Card;
-import com.getmyisland.core.game.Card.Suit;
-import com.getmyisland.core.game.Card.Value;
-import com.getmyisland.core.game.Deck;
-import com.getmyisland.core.game.DiscardPile;
-import com.getmyisland.core.game.Player;
 import com.getmyisland.fx.GameViewController;
+import com.getmyisland.game.Card;
+import com.getmyisland.game.Card.Suit;
+import com.getmyisland.game.Card.Value;
+import com.getmyisland.game.Deck;
+import com.getmyisland.game.DiscardPile;
+import com.getmyisland.game.Player;
 
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.DialogEvent;
 
@@ -224,8 +225,15 @@ public class GameManager {
 		dialog.setOnCloseRequest(new EventHandler<DialogEvent>() {
 			@Override
 			public void handle(DialogEvent event) {
+				Suit wishSuit = dialog.getResult();
+				
+				// If the player selects cancel use the default choice
+				if(wishSuit == null) {
+					wishSuit = dialog.getSelectedItem();
+				}
+				
 				// Get the value
-				discardPile.getTopCard().wishForSuit(dialog.getResult());
+				discardPile.getTopCard().wishForSuit(wishSuit);
 			}
 		});
 		dialog.showAndWait();

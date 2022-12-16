@@ -1,4 +1,4 @@
-package com.getmyisland.core.game;
+package com.getmyisland.game;
 
 /**
  * Card class that holds information like {@link Suit} and {@link Value}

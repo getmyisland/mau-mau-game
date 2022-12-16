@@ -7,8 +7,8 @@ import java.util.List;
 
 import com.getmyisland.core.GameManager;
 import com.getmyisland.core.Main;
-import com.getmyisland.core.game.Card;
-import com.getmyisland.core.game.Player;
+import com.getmyisland.game.Card;
+import com.getmyisland.game.Player;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -23,7 +23,7 @@ import javafx.scene.control.Label;
  *
  */
 public class GameViewController {
-	private final GameManager gameManager = new GameManager(this);
+	private GameManager gameManager;
 	private Player currentPlayer;
 
 	@FXML
@@ -75,6 +75,8 @@ public class GameViewController {
 	private Button btnDiscardPile;
 
 	public void initialize() {
+		cardButtons.clear();
+		
 		// Populate Card Buttons
 		cardButtons.add(btnCard01);
 		cardButtons.add(btnCard02);
@@ -88,6 +90,7 @@ public class GameViewController {
 		cardButtons.add(btnCard10);
 		cardButtons.add(btnCard11);
 
+	 	gameManager = new GameManager(this);
 		gameManager.startGame();
 	}
 
